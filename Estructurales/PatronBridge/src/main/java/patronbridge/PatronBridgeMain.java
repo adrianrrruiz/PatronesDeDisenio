@@ -6,6 +6,7 @@
 
 package patronbridge;
 import encriptacion.ProcesoEncriptarAES;
+import encriptacion.ProcesoEncriptarBlowfish;
 import encriptacion.ProcesoEncriptarDES;
 import encriptacion.ProcesoSinEncriptar;
 import implementacion.PuenteMensajeEncriptacion;
@@ -20,6 +21,7 @@ public class PatronBridgeMain {
     public static void main(String[] args) {
         InterfaceMensajeEncriptacion FormatoAES = new PuenteMensajeEncriptacion(new ProcesoEncriptarAES());
         InterfaceMensajeEncriptacion FormatoDES = new PuenteMensajeEncriptacion(new ProcesoEncriptarDES());
+        InterfaceMensajeEncriptacion FormatoBlowfish = new PuenteMensajeEncriptacion(new ProcesoEncriptarBlowfish());
         InterfaceMensajeEncriptacion SinFormato = new PuenteMensajeEncriptacion(new ProcesoSinEncriptar());
 
         try {
@@ -29,6 +31,9 @@ public class PatronBridgeMain {
 
             String messageDES = FormatoDES.EncryptarMensaje(message, "XMzDdG4D03CKm2Ix");
             System.out.println("Formato DES > " + messageDES + "\n");
+
+            String messageBlowfish = FormatoBlowfish.EncryptarMensaje(message, "PatronBridgeReto123");
+            System.out.println("Formato Blowfish > " + messageBlowfish + "\n");
 
             String messageNO = SinFormato.EncryptarMensaje(message, null);
             System.out.println("Sin Formato > " + messageNO + "\n");
