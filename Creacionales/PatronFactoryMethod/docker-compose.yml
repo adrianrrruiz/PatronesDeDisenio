@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_container
+    environment:
+      - MYSQL_ROOT_PASSWORD=nairda
+      - MYSQL_DATABASE=mydb
+      - MYSQL_PORT=3306
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - MYSQL_ROOT_PASSWORD=nairda
+      - PMA_HOST=mysql_container
+    ports:
+      - "8080:80"
+
+  postgres:
+    image: postgres:13.3
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: adrian
+      POSTGRES_PASSWORD: nairda
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=adrian@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=nairda
+    ports:
+      - "5050:80"

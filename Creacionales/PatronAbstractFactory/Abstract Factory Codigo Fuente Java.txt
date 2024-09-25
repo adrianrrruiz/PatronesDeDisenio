@@ -1,0 +1,391 @@
+
+-----------------------------------------------------------
+------------------Paquete: Propiedades --------------------
+-------- Clase: AbsFactoryPropiedades.properties -----------
+-----------------------------------------------------------
+servicioImplementado af.familiaws.ImplementacionFabricaWS
+#servicioImplementado af.familiarest.ImplementacionFabricaRestful
+
+----------------------------------------------------------
+------------------Paquete: utilidades --------------------
+------------ Clase: UtilidadesAcceso.java ----------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ */
+package utilidades;
+
+import java.io.InputStream;
+import java.util.Properties;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class UtilidadesAcceso {
+    public static Properties loadProperty(String propertiesURL){
+        try {
+            Properties properties = new Properties();
+            InputStream inputStream = UtilidadesAcceso.class.getClassLoader().getResourceAsStream(propertiesURL);
+            properties.load(inputStream);
+            return properties;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+
+----------------------------------------------------------
+------------------Paquete: servicios --------------------
+------------ Clase: IServiciosArticulos.java -------------
+----------------- Tipo: Interface-----------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Tipo de Clase: Interface
+ */
+package servicios;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public interface IServiciosArticulos {
+    public String[] getArticulos();
+}
+
+
+----------------------------------------------------------
+------------------Paquete: servicios --------------------
+--------- Clase: IServiciosEmpleados.java ----------------
+----------------- Tipo: Interface-----------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Tipo de Clase: Interface
+ */
+package servicios;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public interface IServiciosEmpleados {
+    public String[] getEmpleados();
+}
+
+
+
+----------------------------------------------------------
+---------------Paquete: af.familiarest--------------------
+----- Clase: ImplementacionFabricaRestful.java -----------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Esta clase representa la fábrica de objetos de la familia de servicios Restful
+ */
+package af.familiarest;
+
+import abstractfactory.bases.IServiciosBasesGenericos;
+import servicios.IServiciosArticulos;
+import servicios.IServiciosEmpleados;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ImplementacionFabricaRestful implements IServiciosBasesGenericos {
+
+    @Override
+    public IServiciosEmpleados getEmpleados() {
+        return new ImplementacionRestEmpleados();
+    }
+
+    @Override
+    public IServiciosArticulos getArticulos() {
+        return new ImplementacionRestArticulos();
+    }
+    
+}
+
+
+----------------------------------------------------------
+---------------Paquete: af.familiarest--------------------
+----- Clase: ImplementacionRestArticulos.java -----------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Implementación para el Service de Articulos tipo Restfull
+ */
+package af.familiarest;
+
+import servicios.IServiciosArticulos;
+
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ImplementacionRestArticulos implements IServiciosArticulos {
+   private static final String[] ARTICULOS = new String[]{"Disco Duro", "Teclados", "Mouse"};
+
+    @Override
+    public String[] getArticulos() {
+         System.out.println("Tipo de Servicio: Restful");
+        return ARTICULOS;
+    }
+   
+   
+    
+}
+
+----------------------------------------------------------
+---------------Paquete: af.familiarest--------------------
+----- Clase: ImplementacionRestEmpleados.java -----------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Implementación para el Service de Empleados tipo Restfull
+ */
+package af.familiarest;
+
+import servicios.IServiciosEmpleados;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ImplementacionRestEmpleados implements IServiciosEmpleados {
+    private static final String[] EMPLEADOS = new String[]{"Juan Guillermo", "David", "Luis Fernando"};
+    
+    @Override
+    public String[] getEmpleados() {
+        System.out.println("Tipo de Servicio: Restful");
+        return EMPLEADOS;
+    }
+    
+}
+
+
+---------------------------------------------------------
+---------------Paquete: af.familiaws---------------------
+------- Clase: ImplementacionFabricaWS.java -------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Esta clase representa la fábrica de objetos de la familia de servicios por WebService
+ */
+package af.familiaws;
+
+import abstractfactory.bases.IServiciosBasesGenericos;
+import servicios.IServiciosArticulos;
+import servicios.IServiciosEmpleados;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ImplementacionFabricaWS implements IServiciosBasesGenericos {
+
+    @Override
+    public IServiciosEmpleados getEmpleados() {
+        return new ImplementacionWSEmpleados();
+    }
+
+    @Override
+    public IServiciosArticulos getArticulos() {
+         return new ImplementacionWSArticulos();
+    }
+    
+}
+
+
+
+---------------------------------------------------------
+---------------Paquete: af.familiaws---------------------
+------- Clase: ImplementacionWSArticulos.java -------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Implementación para el Web Service de Articulos
+ */
+package af.familiaws;
+
+import servicios.IServiciosArticulos;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ImplementacionWSArticulos implements IServiciosArticulos {
+    private static final String[] ARTICULOS = new String[]{"Disco Duro", "Teclados", "Mouse"};
+    
+    @Override
+    public String[] getArticulos() {
+        System.out.println("Tipo de Servicio: WebServices");
+        return ARTICULOS;
+        
+    }
+    
+}
+
+---------------------------------------------------------
+---------------Paquete: af.familiaws---------------------
+------- Clase: ImplementacionWSEmpleados.java -------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Implementación para el Web Service de Empleados
+ */
+package af.familiaws;
+
+import servicios.IServiciosEmpleados;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ImplementacionWSEmpleados implements IServiciosEmpleados {
+    private static final String[] EMPLEADOS = new String[]{"Juan Guillermo", "David", "Luis Fernando"};
+    
+    @Override
+    public String[] getEmpleados() {
+        System.out.println("Tipo de Servicio: WebServices");
+        return EMPLEADOS;
+    }
+    
+}
+
+---------------------------------------------------------
+---------Paquete: abstractfactory.bases------------------
+--- Clase: ServiciosGenericosAbstractFactory.java -------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Clase para la creación de los ervicios de la Fabrica
+ */
+
+package abstractfactory.bases;
+
+import java.util.Properties;
+import utilidades.UtilidadesAcceso;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ServiciosGenericosAbstractFactory {
+    public ServiciosGenericosAbstractFactory() {}
+    
+        public static IServiciosBasesGenericos createServiceFactory() {
+        Properties props = UtilidadesAcceso.loadProperty(
+                "propiedades/AbsFactoryPropiedades.properties");
+        String factoryClass = 
+                props.getProperty("servicioImplementado");
+        try {
+            return (IServiciosBasesGenericos) 
+                    Class.forName(factoryClass).newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+
+
+
+
+---------------------------------------------------------
+------------Paquete: abstractfactory.bases---------------
+----------- Clase: IServiciosBasesGenericos.java-------------
+----------------- Tipo: Interface-----------------------
+---------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Tipo de Clase: Interface -> Servicios Bases Genericos
+ */
+package abstractfactory.bases;
+
+import servicios.IServiciosArticulos;
+import servicios.IServiciosEmpleados;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public interface IServiciosBasesGenericos {
+    public IServiciosEmpleados getEmpleados();
+    public IServiciosArticulos getArticulos();
+}
+
+---------------------------------------------------------
+------------Paquete: patronabstractfactory---------------
+--------- Clase: PatronAbstractFactoryMain.java----------
+----------------- Tipo: Main() -------------------------
+---------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Abstract Factory
+ * Tipo de Clase: Main()
+ */
+package patronabstractfactory;
+import abstractfactory.bases.IServiciosBasesGenericos;
+import abstractfactory.bases.ServiciosGenericosAbstractFactory;
+import java.util.Arrays;
+import servicios.IServiciosArticulos;
+import servicios.IServiciosEmpleados;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class PatronAbstractFactoryMain {
+
+   
+    public static void main(String[] args) {
+        
+        IServiciosBasesGenericos factory = 
+        ServiciosGenericosAbstractFactory.createServiceFactory();
+        IServiciosEmpleados employeeService = factory.getEmpleados();
+        IServiciosArticulos productService = factory.getArticulos();
+        
+        System.out.println("Servicio Empleados class > " 
+                + employeeService.getClass().getCanonicalName());
+        System.out.println("Servicio Articulos class  > " 
+                + productService.getClass().getCanonicalName());
+        
+        System.out.println("getEmployee > " 
+                + Arrays.toString(employeeService.getEmpleados()));
+        System.out.println("getProduct  > " 
+                + Arrays.toString(productService.getArticulos()));
+        
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

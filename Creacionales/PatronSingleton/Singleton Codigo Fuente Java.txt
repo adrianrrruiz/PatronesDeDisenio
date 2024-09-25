@@ -1,0 +1,148 @@
+----------------------------------------------------------
+---------------Paquete: propiedades ----------------------
+-- Clase: ConfiguracionPropiedades.propierties ----------
+----------------------------------------------------------
+nombreAplicacion UPJ IngSistemas PDS
+numeroVersion 1.0.0
+
+----------------------------------------------------------
+-----------------Paquete: utilidades ---------------------
+------------- Clase: UtilidadesAcceso.java ---------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Singleton
+ * Tipo de Clase: Configuración de Propiedades
+ */
+package utilidades;
+
+import java.io.InputStream;
+import java.util.Properties;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class UtilidadesAcceso {
+    public static Properties loadProperty(String propertiesURL){
+        try {
+            Properties properties = new Properties();
+            InputStream inputStream = UtilidadesAcceso.class.getClassLoader().getResourceAsStream(propertiesURL);
+            properties.load(inputStream);
+            return properties;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+
+-------------------------------------------------------
+------------Paquete: patronsingleton ------------------
+------- Clase: ParametrizacionSingleton.java ----------
+-------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Singleton
+ * Tipo de Clase: Java
+ * Sub objetivo es la configuración y parametrización del patrón.
+ */
+package patronsingleton;
+import java.util.Properties;
+import utilidades.UtilidadesAcceso;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ParametrizacionSingleton {
+    private static ParametrizacionSingleton singleton;
+
+    private static final String CONFIGURATION_PROP = "propiedades/ConfiguracionPropiedades.properties";
+    
+    private static final String NOMBRE_APLICACION_PROP = "nombreAplicacion";
+    private static final String NUMERO_VERSION_PROP = "numeroVersion";
+
+    private String nombreAplicacion;
+    private String numeroVersion;
+    
+    private ParametrizacionSingleton() {
+        Properties prop = UtilidadesAcceso.loadProperty(CONFIGURATION_PROP);
+        this.nombreAplicacion = prop.getProperty(NOMBRE_APLICACION_PROP);
+        this.numeroVersion = prop.getProperty(NUMERO_VERSION_PROP);
+    }
+    
+    private static synchronized void createInstance(){
+        if(singleton ==null){
+            singleton = new ParametrizacionSingleton();
+        }
+    }
+
+    public static ParametrizacionSingleton getInstance() {
+        if(singleton == null) {
+            createInstance();
+        }
+        return singleton;
+    }
+
+    public String getNombreAplicacion() {
+        return nombreAplicacion;
+    }
+
+    public void setNombreAplicacion(String nombreAplicacion) {
+        this.nombreAplicacion = nombreAplicacion;
+    }
+
+    public String getNumeroVersion() {
+        return numeroVersion;
+    }
+
+    public void setNumeroVersion(String numeroVersion) {
+        this.numeroVersion = numeroVersion;
+    }
+
+    @Override
+    public String toString() {
+        return "ParametrizacionSingleton{" + "nombreAplicacion=" + nombreAplicacion + ", numeroVersion=" + numeroVersion + '}';
+    }
+
+
+    
+}
+
+
+-------------------------------------------------------
+-------------Paquete: patronsingleton -----------------
+----------- Clase: PatronSingletonMain.java -----------
+----------------- Tipo: Main() ------------------------
+-------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Singleton
+ * Tipo de Clase: Main()
+ */
+package patronsingleton;
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class PatronSingletonMain {
+    public static void main(String[] args) {
+        //Configuración de Propiedades para el Modulo No->1
+        ParametrizacionSingleton singletonA = ParametrizacionSingleton.getInstance();
+        //Configuración de Propiedades para el Modulo No->1
+        ParametrizacionSingleton singletonB = ParametrizacionSingleton.getInstance();
+        System.out.println(singletonA);
+        System.out.println(singletonB);
+        System.out.println("Igual referencia ==> " + (singletonA == singletonB));
+        singletonA.setNombreAplicacion("Patron Creacional Singleton");
+        singletonB.setNumeroVersion("2.0x");
+        System.out.println("SingletonA ==> " + singletonA);
+        System.out.println("SingletonB ==> " + singletonB);
+        singletonA = null;
+        singletonB = null;
+        singletonA = ParametrizacionSingleton.getInstance();
+        System.out.println("singletonA ==> " + singletonA);
+    }
+   
+}

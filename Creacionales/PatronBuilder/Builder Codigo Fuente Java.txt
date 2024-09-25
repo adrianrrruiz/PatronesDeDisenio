@@ -1,0 +1,429 @@
+
+----------------------------------------------------------
+-------------Paquete: transferencia.datos ----------------
+-------------- Clase: Contactos.java --------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Builder
+ * Clase: Contactos
+ */
+package transferencia.datos;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class Contactos {
+    private String nombres;
+    private Telefonos telefonos;
+    private Direccion direccion;
+    
+    public Contactos() {
+    }
+
+    public Contactos(String nombres, Telefonos telefonos,Direccion direccion) {
+        this.nombres = nombres;
+        this.telefonos = telefonos;
+        this.direccion = direccion;
+    }
+     public Contactos(String nombres, Telefonos telefonos) {
+        this.nombres = nombres;
+        this.telefonos = telefonos;
+    }
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public Telefonos getTelefonos() {
+        return telefonos;
+    }
+
+    public void setTelefonos(Telefonos telefonos) {
+        this.telefonos = telefonos;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+    
+    @Override
+    public String toString() {
+        return "Contactos{" + "Nombres=" + nombres + ", Telefonos=" + telefonos + '}';
+    }
+    
+}
+
+----------------------------------------------------------
+-------------Paquete: transferencia.datos ----------------
+-------------- Clase: Direccion.java --------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Builder
+ * Clase: Direcciòn
+ */
+package transferencia.datos;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class Direccion {
+    private String direccion;
+    private String ciudad;
+    private String pais;
+    private String localidad;
+
+    public Direccion() {
+    }
+    
+    public Direccion(String direccion, String ciudad, String pais, String localidad) {
+        this.direccion = direccion;
+        this.ciudad = ciudad;
+        this.pais = pais;
+        this.localidad = localidad;
+    }
+    
+     
+    
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
+    }
+    @Override
+    public String toString() {
+        return "Dirección{" + "dirección=" + direccion + ", Ciudad=" + ciudad + ", Pais=" + pais + ", Localidad=" + localidad + '}';
+    } 
+}
+
+----------------------------------------------------------
+-------------Paquete: transferencia.datos ----------------
+-------------- Clase: Telefonos.java --------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Builder
+ * Clase: Direcciòn
+ */
+package transferencia.datos;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class Telefonos {
+    private String numeroTelefono;
+    private String extension;
+    private String tipo;
+
+    public Telefonos() {
+    }
+    
+    public Telefonos(String numeroTelefono, String extension, String tipo) {
+        this.numeroTelefono = numeroTelefono;
+        this.extension = extension;
+        this.tipo = tipo;
+    }
+    
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
+    @Override
+    public String toString() {
+        return "Telefono{" + "Numero_Telefono=" + numeroTelefono + ", Extensión=" + extension + ", Tipo=" + tipo + '}';
+    }
+    
+    
+}
+
+----------------------------------------------------------
+-------------Paquete: transferencia.datos ----------------
+-------------- Clase: Estudiante.java --------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Builder
+ * Clase: Estudiante - Java.
+ */
+package transferencia.datos;
+
+import java.util.ArrayList;
+import java.util.List;
+import patronbuilder.InterfaceBuilder;
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class Estudiante {
+    
+    private String nombre;
+    private int edad;
+    private String genero;
+    private Direccion direccion;
+    private List<Telefonos> telefonos;
+    private List<Contactos> contactos;
+    
+    private Estudiante(String nombre, int edad, String genero, Direccion direccion, 
+            List<Telefonos> telefonos, List<Contactos> contactos) {
+        this.nombre = nombre;
+        this.edad = edad;
+        this.genero = genero;
+        this.direccion = direccion;
+        this.telefonos = telefonos;
+        this.contactos = contactos;
+    }
+
+    private Estudiante(String nombre, int edad, String genero) {
+        this.nombre = nombre;
+        this.edad = edad;
+        this.genero = genero;
+        
+    }
+    
+     public Estudiante() {
+    }
+    
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+
+    public List<Telefonos> getTelefonos() {
+        return telefonos;
+    }
+
+    public void setTelefonos(List<Telefonos> telefonos) {
+        this.telefonos = telefonos;
+    }
+
+    public List<Contactos> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(List<Contactos> contactos) {
+        this.contactos = contactos;
+    }
+    
+    @Override
+    public String toString() {
+        return "Estudiante{" + "Nombre=" + nombre + ", Edad=" + edad + ", Genero=" 
+                + genero + ", \nDirección=" + direccion + ", \nTelefono=" + telefonos 
+                + ", \nContactos=" + contactos + '}';
+    }
+    
+    public static class EstudianteBuilder implements InterfaceBuilder<Estudiante>{
+
+         private String nombre;
+         private int edad;
+         private String genero;
+         private Direccion direccion;
+         private final List<Telefonos> telefonos = new ArrayList<>();
+         private final List<Contactos> contactos = new ArrayList<>();
+        
+         public EstudianteBuilder() {
+        }
+
+        public EstudianteBuilder setNombre(String nombre) {
+            this.nombre = nombre;
+            return this;
+        }
+
+        public EstudianteBuilder setEdad(int edad) {
+            this.edad = edad;
+            return this;
+        }
+
+       
+        public EstudianteBuilder setGenero(String genero) {
+            this.genero = genero;
+            return this;
+        }
+
+     
+        public EstudianteBuilder setDireccion(String direccion, String ciudad,String pais, String localidad) {
+            this.direccion = new Direccion(direccion, ciudad, pais,localidad);
+            return this;
+        }
+         
+         public EstudianteBuilder addTelefonos(String numeroTelefono, String extension, 
+                String tipo) {
+            telefonos.add(new Telefonos(numeroTelefono, extension, tipo));
+            return this;
+        } 
+         
+         public EstudianteBuilder addContactos(String nombres, String numeroTelefono, 
+                String extension, String tipo,String direccion, String ciudad, 
+                String pais, String localidad) {
+            contactos.add(new Contactos(nombres, new Telefonos(numeroTelefono, extension, tipo)
+                    ,new Direccion(direccion, ciudad, pais, localidad)));
+            return this;
+        }
+         
+         public EstudianteBuilder addContactos(String nombres, String numeroTelefono, 
+                String extension, String tipo) {
+            contactos.add(new Contactos(nombres, new Telefonos(numeroTelefono, extension, tipo)));
+            return this;
+        }
+         
+        @Override
+        public Estudiante build() {
+            return new Estudiante(nombre, edad, genero, direccion, telefonos, contactos);
+        }
+        
+    }
+}
+
+
+
+
+--------------------------------------------------------
+-------------Paquete: patronbuilder --------------------
+------------ Clase: InterfaceBuilder.java --------------
+----------------- Tipo: Interface-----------------------
+--------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Builder
+ * Tipo de Clase: Interface
+ */
+package patronbuilder;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public interface InterfaceBuilder<T> {
+    public T build();
+}
+
+
+
+
+-------------------------------------------------------
+-------------Paquete: patronbuilder -------------------
+----------- Clase: PatronBuilderMain.java -------------
+----------------- Tipo: Main() ------------------------
+-------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Creacional - > Builder
+ * Tipo de Clase: Main()
+ */
+package patronbuilder;
+
+import transferencia.datos.Estudiante;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class PatronBuilderMain {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+            Estudiante est = new Estudiante.EstudianteBuilder()
+                .setNombre("Gilberto Santarrosa")
+                .setGenero("Masculino")
+                .setEdad(49)
+                .setDireccion("Santurce " 
+                        + "San Juan", "Puerto Rico", "Puerto Rico", "03400")
+                .addContactos("Fania All Star", "555777888", "123", "Estudios", 
+                        "New York", "Estados Unidos"
+                        , "USA", "10023")
+                .addContactos("Ruben Blades", "202020", null, "Celular")
+                .addTelefonos("88889999", null, "Celular")
+                .addTelefonos("1010103030", null, "Estudios")
+                .build();
+        System.out.println(est);
+    }
+    
+}
+
+
+

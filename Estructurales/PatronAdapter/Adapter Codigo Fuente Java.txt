@@ -1,0 +1,486 @@
+
+----------------------------------------------------------
+------------PATRON ESTRUCTURAL ADAPTER  ------------------
+----------------------------------------------------------
+
+
+----------------------------------------------------------
+------------------Paquete: fintech.a ---------------------
+--------------- Clase: FintechACreditos ------------------
+------------------- Tipo: Java ---------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Java
+ */
+package fintech.a;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FintechACreditos {
+    public String nombre;
+    public float credito;
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public float getCredito() {
+        return credito;
+    }
+
+    public void setCredito(float credito) {
+        this.credito = credito;
+    }
+    
+    
+    
+}
+
+
+
+----------------------------------------------------------
+------------------Paquete: fintech.a ---------------------
+-------- Clase: FintechARecepcionCredito -----------------
+------------------- Tipo: Java ---------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Java
+ */
+package fintech.a;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FintechARecepcionCredito {
+    
+    public void sendCreditForValidate(final FintechACreditos request, final IntFintechARecepcionCredito listener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("La Fintech A ha recibido su solicitud, dentro de poco recibirá una respuesta");
+                FintechAResultadoAprobacion response = new FintechAResultadoAprobacion();
+                if (request.getCredito() <= 1500) {
+                    response.setAprobado("Y");
+                } else {
+                    response.setAprobado("N");
+                }
+                try {
+                    Thread.sleep(1000 * 30);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                listener.NotificacionResultado(response);
+            }
+        }).start();
+    }
+}
+
+
+----------------------------------------------------------
+------------------Paquete: fintech.a ---------------------
+-------- Clase: FintechAResultadoAprobacion --------------
+------------------- Tipo: Java ---------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Java
+ */
+package fintech.a;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FintechAResultadoAprobacion {
+     public String aprobado;
+
+    public String getAprobado() {
+        return aprobado;
+    }
+
+    public void setAprobado(String aprobado) {
+        this.aprobado = aprobado;
+    }
+     
+     
+}
+
+
+----------------------------------------------------------
+------------------Paquete: fintech.a ---------------------
+-------- Clase: IntFintechARecepcionCredito --------------
+------------------- Tipo: Interface ----------------------
+----------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Interface
+ */
+package fintech.a;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public interface IntFintechARecepcionCredito {
+    public void NotificacionResultado(FintechAResultadoAprobacion resultado);
+}
+
+
+
+----------------------------------------------------------
+------------------Paquete: fintech.b ---------------------
+-------------- Clase: FintechBCreditosAPI ----------------
+--------------------- Tipo: Java -------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Java
+ */
+package fintech.b;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FintechBCreditosAPI {
+    
+     public FintechBRespuestaCredito sendCreditRequest(FintechBSolicitudCredito request){
+        FintechBRespuestaCredito response =new FintechBRespuestaCredito();
+        if(request.getValorSolicitado()<= 5000){
+            response.setResultadoAprobacion(true);
+        }else{
+            response.setResultadoAprobacion(false);
+        }
+        return response;
+    }
+}
+
+----------------------------------------------------------
+------------------Paquete: fintech.b ---------------------
+-------------- Clase: FintechBRespuestaCredito ----------------
+--------------------- Tipo: Java -------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Java
+ */
+package fintech.b;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FintechBRespuestaCredito {
+     public boolean ResultadoAprobacion;
+
+    public boolean isResultadoAprobacion() {
+        return ResultadoAprobacion;
+    }
+
+    public void setResultadoAprobacion(boolean ResultadoAprobacion) {
+        this.ResultadoAprobacion = ResultadoAprobacion;
+    }
+     
+}
+
+
+----------------------------------------------------------
+------------------Paquete: fintech.b ---------------------
+------------ Clase: FintechBSolicitudCredito -------------
+--------------------- Tipo: Java -------------------------
+----------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Java
+ */
+package fintech.b;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FintechBSolicitudCredito {
+     private String NombreCliente;
+     private double ValorSolicitado;
+
+    public String getNombreCliente() {
+        return NombreCliente;
+    }
+
+    public void setNombreCliente(String NombreCliente) {
+        this.NombreCliente = NombreCliente;
+    }
+
+    public double getValorSolicitado() {
+        return ValorSolicitado;
+    }
+
+    public void setValorSolicitado(double ValorSolicitado) {
+        this.ValorSolicitado = ValorSolicitado;
+    }
+     
+}
+
+----------------------------------------------------------
+---------------Paquete: implementacion -------------------
+-------------- Clase: AdaptadorFintechA  -----------------
+--------------------- Tipo: Java -------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Java
+ */
+
+package implementacion;
+import fintech.a.FintechACreditos;
+import fintech.a.FintechARecepcionCredito;
+import fintech.a.FintechAResultadoAprobacion;
+import fintech.a.IntFintechARecepcionCredito;
+
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class AdaptadorFintechA implements InterfaceFintechAdaptador, IntFintechARecepcionCredito {
+    private FintechAResultadoAprobacion FAresponse;
+    
+    @Override
+    public FintechCreditoRespuesta EnvioSolicitudCredito(FintechSolicitudCredito request) {
+        FintechACreditos FArequest = new FintechACreditos();
+        FArequest.setCredito((float) request.getValor());
+        FArequest.setNombre(request.getCliente());
+
+        FintechARecepcionCredito sender = new FintechARecepcionCredito();
+        sender.sendCreditForValidate(FArequest, this);
+
+        do {
+            try {
+                Thread.sleep(10000);
+                System.out.println("Fintech_A solicitud en espera....");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } while (FAresponse == null);
+
+        FintechCreditoRespuesta response = new FintechCreditoRespuesta();
+        response.setAprobacion(FAresponse.getAprobado() == "Y" ? true : false);
+        return response;
+    }
+
+    @Override
+    public void NotificacionResultado(FintechAResultadoAprobacion resultado) {
+        this.FAresponse = resultado;
+    }
+    
+}
+
+----------------------------------------------------------
+---------------Paquete: implementacion -------------------
+-------------- Clase: AdaptadorFitechB  -----------------
+--------------------- Tipo: Java -------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Java
+ */
+package implementacion;
+import fintech.b.FintechBSolicitudCredito;
+import fintech.b.FintechBRespuestaCredito;
+import fintech.b.FintechBCreditosAPI;
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class AdaptadorFitechB implements InterfaceFintechAdaptador {
+
+    @Override
+    public FintechCreditoRespuesta EnvioSolicitudCredito(FintechSolicitudCredito request) {
+        FintechBSolicitudCredito FBrequest = new FintechBSolicitudCredito();
+        FBrequest.setNombreCliente(request.getCliente());
+        FBrequest.setValorSolicitado(request.getValor());
+        
+        FintechBCreditosAPI api = new FintechBCreditosAPI();
+        FintechBRespuestaCredito FBresponse = api.sendCreditRequest(FBrequest);
+        
+        FintechCreditoRespuesta response = new FintechCreditoRespuesta();
+        response.setAprobacion(FBresponse.isResultadoAprobacion());
+        return response;
+    }
+    
+}
+
+----------------------------------------------------------
+---------------Paquete: implementacion -------------------
+----------- Clase: FintechCreditoRespuesta  --------------
+--------------------- Tipo: Java -------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Java
+ */
+package implementacion;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FintechCreditoRespuesta {
+     public boolean aprobacion;
+
+    public boolean isAprobacion() {
+        return aprobacion;
+    }
+
+    public void setAprobacion(boolean aprobacion) {
+        this.aprobacion = aprobacion;
+    }
+     
+     
+}
+
+
+----------------------------------------------------------
+---------------Paquete: implementacion -------------------
+---------- Clase: FintechSolicitudCredito  --------------
+--------------------- Tipo: Java -------------------------
+----------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Java
+ */
+package implementacion;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FintechSolicitudCredito {
+     private String Cliente;
+    private double Valor;
+
+    public String getCliente() {
+        return Cliente;
+    }
+
+    public void setCliente(String Cliente) {
+        this.Cliente = Cliente;
+    }
+
+    public double getValor() {
+        return Valor;
+    }
+
+    public void setValor(double Valor) {
+        this.Valor = Valor;
+    }
+    
+}
+----------------------------------------------------------
+---------------Paquete: implementacion -------------------
+--------- Clase: InterfaceFintechAdaptador  -------------
+------------------- Tipo: Interface ----------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Interface
+ */
+package implementacion;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public interface InterfaceFintechAdaptador {
+    public FintechCreditoRespuesta EnvioSolicitudCredito(FintechSolicitudCredito request);
+    
+}
+
+
+------------------------------------------------------
+-------------Paquete: patronadapter -------------------
+---------- Clase: PatronAdapterMain.java -------------
+----------------- Tipo: Main() -----------------------
+------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Adapter
+ * Tipo de Clase: Main()
+ */
+package patronadapter;
+import implementacion.AdaptadorFintechA;
+import implementacion.AdaptadorFitechB;
+import implementacion.FintechCreditoRespuesta;
+import implementacion.FintechSolicitudCredito;
+import implementacion.InterfaceFintechAdaptador;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class PatronAdapterMain {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+         FintechSolicitudCredito request = new FintechSolicitudCredito();
+        request.setCliente("Cristiano Ronaldo");
+        request.setValor(1000);
+
+        InterfaceFintechAdaptador FinancieraB = new AdaptadorFitechB();
+        FintechCreditoRespuesta FBresponse = FinancieraB.EnvioSolicitudCredito(request);
+        System.out.println("Resultado aprobación Financiera <<B>>: > " + FBresponse.isAprobacion() + "\n");
+        
+        if (FBresponse.isAprobacion()) {
+            System.out.println("Felicitaciones!!!!!, la Financiera <<B>> aprobó su solicitud de crédito." + "\n");
+        } 
+        else
+            { 
+             System.out.println("Lo sentimos, la Financiera <<B>> no aprobó su crédito");   
+            }
+            
+        
+        
+        InterfaceFintechAdaptador FinancieraA = new AdaptadorFintechA();
+        FintechCreditoRespuesta FAresponse = FinancieraA.EnvioSolicitudCredito(request);
+        System.out.println("Resultado aprobación Financiera <<A>>: > " + FAresponse.isAprobacion() + "\n");
+        
+        if (FAresponse.isAprobacion()) {
+            System.out.println("Felicitaciones!!!!!, la Financiera <<A>> aprobó su solicitud de crédito.");
+        } 
+        else
+            { 
+             System.out.println("Lo sentimos, la Financiera <<A>> no aprobó su crédito");   
+            }
+        
+    }
+    
+}

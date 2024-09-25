@@ -1,0 +1,496 @@
+
+-----------------------------------------------------------
+------------------Paquete: Propiedades --------------------
+-------- Clase: ConfiguracionFactory.properties -----------
+-----------------------------------------------------------
+defaultDBClass implementacion.AdaptadorPostgresql
+#defaultDBClass implementacion.AdaptadorMysql
+
+-----------------------------------------------------------
+------------------Paquete: Propiedades --------------------
+----------- Clase: DatosMysql.properties ------------------
+-----------------------------------------------------------
+
+host localhost
+port 3306
+dbname patrones
+user root
+password 11223344
+
+
+-----------------------------------------------------------
+------------------Paquete: Propiedades --------------------
+--------- Clase: DatosPOstgresql.properties ---------------
+-----------------------------------------------------------
+host localhost
+port 5432
+service patrones
+user postgres
+password 11223344
+
+
+----------------------------------------------------------
+--------------------Paquete: dao -------------------------
+------------- Clase: DAOarticulos.java -------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patròn Creacional - > Factory Method
+ * DAO-> Data Access Object
+ * Còdigo para configurar el acceso a las tablas de la Base de datos (Mysql/Postgresql)
+ */
+package dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import entidades.articulos;
+import patronfactorymethod.IntAdaptador;
+import patronfactorymethod.FactoryBaseDatos;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class DAOarticulos {
+     private IntAdaptador dbAdapter;
+     
+       
+     public DAOarticulos(){
+        dbAdapter = FactoryBaseDatos.getDefaultDBAdapter();
+    }
+     
+    public List<articulos> findAllProducts(){
+        Connection connection = dbAdapter.getConnection();
+        List<articulos> productList = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT idarticulo ,nombrearticulo"
+                            + ",valor FROM articulos");
+            ResultSet results = statement.executeQuery();
+            while(results.next()){
+                productList.add(new articulos(results.getLong(1), 
+                        results.getString(2), results.getDouble(3)));
+            }
+            return productList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }finally{
+            try {
+                connection.close();
+            } catch (Exception e) {}
+        }
+    }
+    
+    public boolean saveProduct(articulos articulo){
+        Connection connection = dbAdapter.getConnection();
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("INSERT INTO articulos(idarticulo,"
+                            + "nombrearticulo,valor) VALUES (?,?,?)");
+            statement.setLong(1, articulo.getIdarticulo());
+            statement.setString(2, articulo.getNombrearticulo());
+            statement.setDouble(3, articulo.getValor());
+            statement.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }finally{
+            try {
+                connection.close();
+            } catch (Exception e) {}
+        }
+    }
+     
+}
+
+----------------------------------------------------------
+-----------------Paquete: entidades ----------------------
+--------------- Clase: articulos.java --------------------
+----------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patròn Creacional - > Factory Method
+ * Clase para el Mapeo de la tabla de Articulos de la BD (Mysql / Postgres)
+ */
+package entidades;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class articulos {
+    private Long idarticulo;
+    private String nombrearticulo;
+    private double valor;
+
+     public articulos(Long idarticulo, String nombrearticulo, double valor) {
+        this.idarticulo = idarticulo;
+        this.nombrearticulo = nombrearticulo;
+        this.valor = valor;
+    }
+     
+    public articulos() {
+    }
+
+    
+    public Long getIdarticulo() {
+        return idarticulo;
+    }
+
+    public void setIdarticulo(Long idarticulo) {
+        this.idarticulo = idarticulo;
+    }
+
+    public String getNombrearticulo() {
+        return nombrearticulo;
+    }
+
+    public void setNombrearticulo(String nombrearticulo) {
+        this.nombrearticulo = nombrearticulo;
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+    
+    @Override
+    public String toString() {
+        return "Articulo{" + "idarticulo=" + idarticulo + ", nombrearticulo=" + nombrearticulo + ", valor=" + valor + '}';
+    }
+}
+
+----------------------------------------------------------
+--------------Paquete: implementacion --------------------
+------------ Clase: AdaptadorMysql.java ------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patròn Creacional - > Factory Method
+ */
+package implementacion;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.util.Properties;
+
+import patronfactorymethod.IntAdaptador;
+import utilidades.UtilidadesAcceso;
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class AdaptadorMysql implements IntAdaptador  {
+
+    private static final String DB_PROPERTIES = "Propiedades/DatosMySQL.properties";
+
+    //Propiedades del archivo de configuraciòn para Mysql
+    private static final String DB_NAME_PROP = "dbname";
+    private static final String DB_HOST_PROP = "host";
+    private static final String DB_PASSWORD_PROP = "password";
+    private static final String DB_PORT_PROP = "port";
+    private static final String DB_USER_PROP = "user";
+    
+    static {
+        //Bloque para registrar el Driver de MySQL
+        try {
+            new com.mysql.jdbc.Driver();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public Connection getConnection() {
+        try {
+            String connectionString = createConnectionString();
+            Connection connection = DriverManager.getConnection(connectionString);
+            System.out.println("Connection class ==> " + connection.getClass().getName());
+            return connection;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    private String createConnectionString() {
+        Properties prop = UtilidadesAcceso.loadProperty(DB_PROPERTIES);
+        String host = prop.getProperty(DB_HOST_PROP);
+        String port = prop.getProperty(DB_PORT_PROP);
+        String db = prop.getProperty(DB_NAME_PROP);
+        String user = prop.getProperty(DB_USER_PROP);
+        String password = prop.getProperty(DB_PASSWORD_PROP);
+
+        String connectionString = "jdbc:mysql://" + host + ":" + port + "/" + db + "?user=" + user + "&password=" + password;
+        System.out.println("ConnectionString ==> " + connectionString);
+        return connectionString;
+    }
+    
+}
+
+
+---------------------------------------------------------
+--------------Paquete: implementacion -------------------
+--------- Clase: AdaptadorPostgresql.java ---------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patròn Creacional - > Factory Method
+ */
+package implementacion;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.util.Properties;
+
+import patronfactorymethod.IntAdaptador;
+import utilidades.UtilidadesAcceso;
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class AdaptadorPostgresql implements IntAdaptador {
+
+    private static final String DB_PROPERTIES = "Propiedades/DatosPOstgresql.properties";
+
+    private static final String DB_SERVICE_PROP = "service";
+    private static final String DB_HOST_PROP = "host";
+    private static final String DB_PASSWORD_PROP = "password";
+    private static final String DB_PORT_PROP = "port";
+    private static final String DB_USER_PROP = "user";
+    
+    static {
+        //Bloque para registrar el Driver de Oracle
+        try {
+             Class.forName("org.postgresql.Driver");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public Connection getConnection() {
+        try {
+            Properties prop = UtilidadesAcceso.loadProperty(DB_PROPERTIES);
+            String user = prop.getProperty(DB_USER_PROP);
+        String password = prop.getProperty(DB_PASSWORD_PROP);
+            String connectionString = createConnectionString();
+            Connection connection = DriverManager.getConnection(connectionString,user,password);
+            System.out.println("Connection class ==> " + connection.getClass().getName());
+            return connection;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    
+    private String createConnectionString() {
+        Properties prop = UtilidadesAcceso.loadProperty(DB_PROPERTIES);
+        String host = prop.getProperty(DB_HOST_PROP);
+        String port = prop.getProperty(DB_PORT_PROP);
+        String service = prop.getProperty(DB_SERVICE_PROP);
+        String user = prop.getProperty(DB_USER_PROP);
+        String password = prop.getProperty(DB_PASSWORD_PROP);
+
+        String connectionString = "jdbc:postgresql://"+host+":"+port+"/"+service;
+        System.out.println("ConnectionString ==> " + connectionString);
+        return connectionString;
+    }
+    
+    
+}
+
+
+---------------------------------------------------------
+-----------------Paquete: utilidades -------------------
+------------ Clase: UtilidadesAcceso.java ---------------
+---------------------------------------------------------
+/*
+* Asignatura: Patrones de Diseño de Software 
+ * Patròn Creacional - > Factory Method
+ */
+
+package utilidades;
+
+import java.io.InputStream;
+import java.util.Properties;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class UtilidadesAcceso {
+    public static Properties loadProperty(String propertiesURL){
+        try {
+            Properties properties = new Properties();
+            InputStream inputStream = UtilidadesAcceso.class.getClassLoader().getResourceAsStream(propertiesURL);
+            properties.load(inputStream);
+            return properties;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+
+
+
+---------------------------------------------------------
+------------Paquete: patronfactorymethod ----------------
+------------ Clase: FactoryBaseDatos.java ---------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patròn Creacional - > Factory Method
+ */
+package patronfactorymethod;
+import java.util.Properties;
+import implementacion.AdaptadorMysql;
+import implementacion.AdaptadorPostgresql;
+import utilidades.UtilidadesAcceso;
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FactoryBaseDatos {
+    
+    private static final String DB_FACTORY_PROPERTY_URL = "Propiedades/ConfiguracionFactory.properties";
+    private static final String DEFAULT_DB_CLASS_PROP = "defaultDBClass";
+    
+        public static IntAdaptador getDBadapter(TiposBD dbType) {
+        switch (dbType) {
+            case MySQL:
+                return new AdaptadorMysql();
+            case POstgresql:
+                return new AdaptadorPostgresql();
+            default:
+                throw new IllegalArgumentException("Not supported");
+        }
+    }
+
+            public static IntAdaptador getDefaultDBAdapter() {
+        try {
+            Properties prop = UtilidadesAcceso.loadProperty(DB_FACTORY_PROPERTY_URL);
+            String defaultDBClass = prop.getProperty(DEFAULT_DB_CLASS_PROP);
+            System.out.println("DefaultDBClass ==> " + defaultDBClass);
+            return (IntAdaptador) Class.forName(defaultDBClass).newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+}
+
+
+---------------------------------------------------------
+--------------Paquete: patronfactorymethod --------------
+-------------- Clase: IntAdaptador.java -----------------
+-------------- Tipo de Clase: Interface -----------------
+---------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patròn Creacional - > Factory Method
+ * Tipo de Archivo: Interface
+ */
+package patronfactorymethod;
+
+import java.sql.Connection;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public interface IntAdaptador {
+    public Connection getConnection();
+}
+
+---------------------------------------------------------
+--------------Paquete: patronfactorymethod --------------
+---------------- Clase: TiposBD.java --------------------
+--------- Tipo de Clase: Enumeración (Java Enum) --------
+---------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patròn Creacional - > Factory Method
+ * Tipo de Archivo: Enumeración
+ */
+package patronfactorymethod;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public enum TiposBD {
+     MySQL, POstgresql,
+}
+
+---------------------------------------------------------
+--------------Paquete: patronfactorymethod --------------
+----------- Clase: PatronFactoryMethod.java -------------
+--------------- Tipo de Clase: Main() -------------------
+---------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patròn Creacional - > Factory Method
+ */
+package patronfactorymethod;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import dao.DAOarticulos;
+import entidades.articulos;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class PatronFactoryMethod {
+
+   
+    public static void main(String[] args) throws SQLException {
+        
+        //Creation of the DAO instance  
+        DAOarticulos daoarticulos = new DAOarticulos();
+        
+        List<articulos> art = daoarticulos.findAllProducts();
+        long totalregistros=art.size()+1;
+        //Creamos los nuevos productos a registrar
+        articulos elementoA = new articulos(totalregistros, "Articulo A"+totalregistros, 120);
+        totalregistros=totalregistros+1;
+        articulos elementoB = new articulos(totalregistros, "Articulo B"+totalregistros, 130);
+        // Product productA = new Product(1L, "Product A", 120);
+        //Product productB = new Product(2L, "Product B", 130);
+        
+        
+        //Product persist  
+        daoarticulos.saveProduct(elementoA);
+        daoarticulos.saveProduct(elementoB);
+        
+        //Create the products  
+        List<articulos> elementos = daoarticulos.findAllProducts();
+        System.out.println("Cantidad Articulos ==> " + elementos.size());
+        for(articulos registro : elementos){
+            System.out.println(registro);
+        }
+        
+    }
+    
+}
