@@ -1,0 +1,39 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.mycompany</groupId>
+    <artifactId>EjemploXml</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
+    </properties>
+    <dependencies>
+	<dependency>
+		<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-xjc</artifactId>
+			<version>2.1.13</version>
+	</dependency>
+	<dependency>
+		<groupId>com.sun.xml.bind</groupId>
+		<artifactId>jaxb-impl</artifactId>
+		<version>2.1.13</version>
+	</dependency>
+</dependencies>
+
+</project>
+
+
+Links:
+http://softpei.blogspot.com/2013/06/uso-de-jaxb-en-el-trabajo-con-xml-y-xsd.html
+http://acodigo.blogspot.com/2017/03/utilizar-librerias-maven-en-ant-con.html
+https://www.arquitecturajava.com/introduccion-java-jaxb/
+https://programmerclick.com/article/1725614605/
+http://www.art4software.com/2013/06/un-pequeno-ejemplo-con-jaxb/
+
+En el archivo pom.xml agreguemos las librerías que deseamos, para nuestro caso jaxb.
+
+Hacemos clic derecho sobre el proyecto y presionamos Clean and Build para iniciar la descarga de librerías y todas sus dependencias.

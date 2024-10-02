@@ -1,0 +1,442 @@
+----------------------------------------------------------
+----------- PATRON ESTRUCTURAL DECORADOR-----------------
+----------------------------------------------------------
+
+
+
+----------------------------------------------------------
+------------------Paquete: mensajes ---------------------
+--------------- Clase: ContenidoMensaje ------------------
+------------------- Tipo: Java --------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Decorador
+ * Tipo de Clase: Java
+ */
+package mensajes;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ContenidoMensaje implements InterfaceMensaje {
+    private String contenidoMensaje;
+    
+
+    public ContenidoMensaje() {
+    }
+
+    public ContenidoMensaje(String mensaje) {
+        this.contenidoMensaje = mensaje;
+    }
+    
+    @Override
+    public InterfaceMensaje ProcesarMensaje() {
+        return this;
+    }
+
+    @Override
+    public String getContenido() {
+        return contenidoMensaje;
+    }
+
+    @Override
+    public void setContenido(String contenido) {
+        this.contenidoMensaje = contenido;
+    }
+
+    
+    public String getContenidoMensaje() {
+        return contenidoMensaje;
+    }
+
+    public void setContenidoMensaje(String contenidoMensaje) {
+        this.contenidoMensaje = contenidoMensaje;
+    }
+    
+    
+    
+}
+
+
+----------------------------------------------------------
+------------------Paquete: mensajes ---------------------
+--------------- Clase: InterfaceMensaje ------------------
+------------------- Tipo: Interface ----------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Decorador
+ * Tipo de Clase: Interface
+ */
+
+package mensajes;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public interface InterfaceMensaje {
+    
+    public InterfaceMensaje ProcesarMensaje();
+    public String getContenido();
+    public void setContenido(String contenido);
+}
+
+
+
+----------------------------------------------------------
+------------------Paquete: mensajes ---------------------
+--------------- Clase: MensajeCliente ------------------
+------------------- Tipo: Java --------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Decorador
+ * Tipo de Clase: Java
+ * Caracteristicas del Mensaje del Cliente
+ */
+package mensajes;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class MensajeCliente implements InterfaceMensaje {
+   
+    private String nombre;
+    private String email;
+    private String telefono;
+    
+    public MensajeCliente(String nombre, String email, String telefono) {
+        this.nombre = nombre;
+        this.email = email;
+        this.telefono = telefono;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+    
+    
+    
+    @Override
+    public InterfaceMensaje ProcesarMensaje() {
+        return this;
+    }
+
+    @Override
+    public String getContenido() {
+        return toString();
+    }
+
+    @Override
+    public String toString() {
+        return "MensajeCliente{" + "nombre=" + nombre + ", \nemail=" + email + ", telefono=" + telefono + '}';
+    }
+
+    
+    @Override
+    public void setContenido(String contenido) {
+        throw new UnsupportedOperationException("No soportado."); 
+    }
+    
+}
+
+
+
+----------------------------------------------------------
+------------------Paquete: decoradores -------------------
+--------------- Clase: DecoradorMensaje ------------------
+------------------- Tipo: Abstracta ----------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Decorador
+ * Tipo de Clase: Clase Abstracta
+ */
+package decoradores;
+
+import mensajes.InterfaceMensaje;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public abstract class DecoradorMensaje implements InterfaceMensaje{
+    protected InterfaceMensaje Formatomensaje;
+    
+    public DecoradorMensaje(InterfaceMensaje mensaje) {
+        this.Formatomensaje = mensaje;
+    }
+
+    @Override
+    public String getContenido() {
+        return Formatomensaje.getContenido();
+    }
+
+    @Override
+    public void setContenido(String contenido) {
+         Formatomensaje.setContenido(contenido); 
+    }
+
+    
+    
+    
+}
+
+----------------------------------------------------------
+------------------Paquete: decoradores -------------------
+----------------- Clase: CifrarMensaje -------------------
+------------------- Tipo: Java ---------------------------
+----------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Decorador
+ * Tipo de Clase: Java
+ */
+
+package decoradores;
+
+import java.security.Key;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import mensajes.InterfaceMensaje;
+import java.util.Base64;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class CifrarMensaje extends DecoradorMensaje {
+    
+    private String usuario;
+    private String password;
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    
+    
+    public CifrarMensaje(String usuario, String password, InterfaceMensaje Formatomensaje) {
+        super(Formatomensaje);
+        this.usuario = usuario;
+        this.password = password;
+    }
+
+    @Override
+    public InterfaceMensaje ProcesarMensaje() {
+        this.Formatomensaje = Formatomensaje.ProcesarMensaje();
+        encryptMessage();
+        return Formatomensaje;
+    }
+    
+    private InterfaceMensaje encryptMessage() {
+        try {
+            Key key = new SecretKeySpec(password.getBytes(), "AES");
+            Cipher c = Cipher.getInstance("AES");
+
+            c.init(Cipher.ENCRYPT_MODE, key);
+            byte[] encVal = c.doFinal(Formatomensaje.getContenido().getBytes());
+            Base64.Encoder encoder = Base64.getEncoder();
+            String encryptedValue= encoder.encodeToString(encVal);
+            
+            Formatomensaje.setContenido(encryptedValue);
+            return Formatomensaje;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+
+    }
+    
+}
+
+
+----------------------------------------------------------
+------------------Paquete: decoradores -------------------
+------------- Clase: FormatoDecoradorXML -----------------
+------------------- Tipo: Java ---------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Decorador
+ * Tipo de Clase: Java
+ */
+package decoradores;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayOutputStream;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+import mensajes.InterfaceMensaje;
+import mensajes.ContenidoMensaje;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FormatoDecoradorXML extends DecoradorMensaje {
+
+    public FormatoDecoradorXML(InterfaceMensaje Formatomensaje) {
+        super(Formatomensaje);
+    }
+    
+    @Override
+    public InterfaceMensaje ProcesarMensaje() {
+        Formatomensaje = Formatomensaje.ProcesarMensaje();
+        Formatomensaje = xmlMessage();
+        return Formatomensaje;
+    }
+    
+    private InterfaceMensaje xmlMessage() {
+        try {
+            JAXBContext jc = JAXBContext.newInstance(Formatomensaje.getClass());
+            JAXBElement<InterfaceMensaje> je2 = new JAXBElement<InterfaceMensaje>(new QName(Formatomensaje.getClass().getName()), (Class<InterfaceMensaje>) Formatomensaje.getClass(), Formatomensaje);
+            Marshaller marshaller = jc.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            marshaller.marshal(je2, output);
+            return new ContenidoMensaje(new String(output.toByteArray()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error de conversion al formato XML");
+        }
+    }
+    
+}
+
+
+----------------------------------------------------------
+------------------Paquete: decoradores -------------------
+------------------ Clase: MensajeSOAP --------------------
+------------------- Tipo: Java ---------------------------
+----------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Decorador
+ * Tipo de Clase: Java
+ */
+package decoradores;
+
+import mensajes.InterfaceMensaje;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class MensajeSOAP extends DecoradorMensaje {
+
+    public MensajeSOAP(InterfaceMensaje Formatomensaje) {
+        super(Formatomensaje);
+    }
+    
+    @Override
+    public InterfaceMensaje ProcesarMensaje() {
+        Formatomensaje.ProcesarMensaje();
+        Formatomensaje =  EnvelopMensaje();
+        return Formatomensaje;
+    }
+    
+        private InterfaceMensaje EnvelopMensaje() {
+        String soap = "<soapenv:Envelope xmlns:soapenv="
+                + "\n\"http://schemas.xmlsoap.org/soap/envelope/\" "
+                + "\nxmlns:ser=\"http://service.dishweb.cl.com/\">\n"
+                + "   <soapenv:Header/>\n"
+                + "   <soapenv:Body>\n"
+                + Formatomensaje.getContenido()
+                + "\n"
+                + "   </soapenv:Body>\n"
+                + "</soapenv:Envelope>";
+        Formatomensaje.setContenido(soap);
+        return Formatomensaje;
+    }
+}
+
+
+------------------------------------------------------
+-------------Paquete: patrondecorator ----------------
+--------- Clase: PatronDecoratorMain.java ------------
+----------------- Tipo: Main() -----------------------
+------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Decorador
+ * Tipo de Clase: Main()
+ */
+
+package patrondecorator;
+import decoradores.CifrarMensaje;
+import decoradores.MensajeSOAP;
+import decoradores.FormatoDecoradorXML;
+import mensajes.InterfaceMensaje;
+import mensajes.MensajeCliente;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class PatronDecoratorMain {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+        MensajeCliente MensajeUsuario = new MensajeCliente(
+                "Fabrizio Bolaño", "fbolano@javeriana.edu.co", "99887766");
+        System.out.println("Mensaje Original ==> " + MensajeUsuario);
+        
+        InterfaceMensaje F1Mensaje = new CifrarMensaje("user", "HG58YZ3CR9123456", 
+                new MensajeSOAP(
+                    new FormatoDecoradorXML(MensajeUsuario))).ProcesarMensaje();
+        System.out.println("Mensaje No. 1 =====================================>\n" 
+                + F1Mensaje.getContenido() + "\n\n");
+        
+        InterfaceMensaje F2Mensaje = new MensajeSOAP(
+                new CifrarMensaje("user", "HG58YZ3CR9123456",
+                    new FormatoDecoradorXML(MensajeUsuario))).ProcesarMensaje();
+        System.out.println("message2 =====================================>\n" 
+                + F2Mensaje.getContenido());
+        
+        
+    }
+    
+}
