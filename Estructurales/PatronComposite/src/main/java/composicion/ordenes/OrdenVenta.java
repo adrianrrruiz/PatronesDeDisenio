@@ -31,7 +31,7 @@ public class OrdenVenta {
     public double getPrecio() {
         double preciolocal = 0d;
         for (AbstraccionProducto child : productos) {
-            preciolocal += child.getPrecio();
+            preciolocal += child.getPrecio() + (child.getPrecio() * child.getTasaImpuesto());
         }
         return preciolocal;
     }
@@ -48,7 +48,7 @@ public class OrdenVenta {
                 + "\nProductos:\n");
         for (AbstraccionProducto prod : productos) {
             System.out.println(prod.getNombre() + "\t\t\t$ "
-                    + formater.format(prod.getPrecio()));
+                    + formater.format(prod.getPrecio()) + "\t\t\t$ " + formater.format(prod.getPrecio() * prod.getTasaImpuesto()));
         }
         System.out.println("Total: " + formater.format(getPrecio())
                 + "\n=============================================");

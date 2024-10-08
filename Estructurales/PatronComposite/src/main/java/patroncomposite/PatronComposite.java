@@ -33,6 +33,8 @@ public class PatronComposite {
     private ConfiguracionCompuestaProducto homePC;
     private ConfiguracionCompuestaProducto pc2x1;
 
+    private ConfiguracionSimpleProducto descuento;
+
     private void CreardProductos() {
         //Configuraciòn de productos simples
         ram4gb = new ConfiguracionSimpleProducto("RAM 4GB", 750, "KingStone");
@@ -47,6 +49,7 @@ public class PatronComposite {
         monitor30inch = new ConfiguracionSimpleProducto("Display 30'", 2000, "HP");
         simpleMouse = new ConfiguracionSimpleProducto("Simple mouse", 150, "Genius");
         gammerMouse = new ConfiguracionSimpleProducto("Gammer mouse", 750, "Alien");
+        descuento = new ConfiguracionSimpleProducto("Descuento", -500, "Descuento");
 
         //Producto Compuesto con: Gammer pc de 8gb ram,HDD 1tb, Intel i7 processor
         //large cabinet,display 30' y one gammer mouse.
@@ -67,6 +70,8 @@ public class PatronComposite {
         homePC.AgregarProducto(smallCabinete);
         homePC.AgregarProducto(monitor20inch);
         homePC.AgregarProducto(simpleMouse);
+        //RETO: Agregar un descuento con un precio negativo al Home PC
+        homePC.AgregarProducto(descuento);
 
         //Combo confirmado por 2 paquetes, Gammer PC + Home PC
         pc2x1 = new ConfiguracionCompuestaProducto("Pack PC Gammer + Home PC");
@@ -92,6 +97,7 @@ public class PatronComposite {
     private void OrdenVentaHomePC() {
         OrdenVenta homeOrdenVenta = new OrdenVenta(2, "Celia Cruz");
         homeOrdenVenta.AgregarProducto(homePC);
+        homeOrdenVenta.AgregarProducto(homePC);
         homeOrdenVenta.ImprimirOrdenVenta();
     }
     private void OrdenVentaCombo() {
@@ -107,6 +113,7 @@ public class PatronComposite {
         OrdenVentaPersonalizada.AgregarProducto(ram4gb);
         OrdenVentaPersonalizada.AgregarProducto(monitor30inch);
         OrdenVentaPersonalizada.AgregarProducto(gammerMouse);
+        OrdenVentaPersonalizada.AgregarProducto(descuento); //RETO
         OrdenVentaPersonalizada.ImprimirOrdenVenta();
     }
 
@@ -115,9 +122,9 @@ public class PatronComposite {
         main.CreardProductos();
 
         // main.OrdenVentaParaConfiguracionSimpleProducto();
-        // main.OrdenVentaHomePC();
+        main.OrdenVentaHomePC();
         // main.OrdenVentaGammerPC();
-        // main.OrdenVentaCombo();
+        //main.OrdenVentaCombo();
         main.OrdenVentaMega();
 
 

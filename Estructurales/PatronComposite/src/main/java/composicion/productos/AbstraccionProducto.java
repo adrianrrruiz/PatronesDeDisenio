@@ -13,11 +13,15 @@ package composicion.productos;
 public abstract class AbstraccionProducto {
     protected String nombre;
     protected double precio;
+    protected double tasaImpuesto;
+    protected int cantidad;
 
     public AbstraccionProducto(String nombre, double precio) {
         super();
         this.nombre = nombre;
         this.precio = precio;
+        this.tasaImpuesto = 0.16;
+        this.cantidad = 2;
     }
 
     public String getNombre() {
@@ -29,11 +33,18 @@ public abstract class AbstraccionProducto {
     }
 
     public double getPrecio() {
-        return precio;
+        return precio * cantidad;
     }
 
     public void setPrecio(double precio) {
         this.precio = precio;
     }
 
+    public double getTasaImpuesto() {return tasaImpuesto;}
+
+    public void setTasaImpuesto(double tasaImpuesto) {this.tasaImpuesto = tasaImpuesto;}
+
+    public int getCantidad() {return cantidad;}
+
+    public void setCantidad(int cantidad) {this.cantidad = cantidad;}
 }
