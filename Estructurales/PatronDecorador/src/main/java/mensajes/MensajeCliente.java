@@ -16,6 +16,10 @@ public class MensajeCliente implements InterfaceMensaje {
     private String email;
     private String telefono;
 
+    // Constructor sin argumentos
+    public MensajeCliente() {
+    }
+
     public MensajeCliente(String nombre, String email, String telefono) {
         this.nombre = nombre;
         this.email = email;
