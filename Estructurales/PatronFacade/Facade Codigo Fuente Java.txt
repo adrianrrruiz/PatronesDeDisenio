@@ -1,0 +1,789 @@
+----------------------------------------------------------
+----------- PATRON ESTRUCTURAL FACADE --------------------
+----------------------------------------------------------
+
+
+
+----------------------------------------------------------
+-------------------Paquete: utilidades ------------------
+-------------------- Clase: Cliente ---------------------
+--------------------- Tipo: java ------------------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+
+package utilidades;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class Cliente {
+    private Long id;
+    private String nombre;
+    private double balance;
+    private String estado;
+    
+     public Cliente() {
+    }
+
+    public Cliente(Long id, String nombre, double balance, String estado) {
+        this.id = id;
+        this.nombre = nombre;
+        this.balance = balance;
+        this.estado = estado;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" + "id=" + id + ", nombre=" + nombre + ", "
+                + "\nbalance=" + balance + ", estado=" + estado + '}';
+    }
+    
+    
+}
+
+
+----------------------------------------------------------
+-------------------Paquete: utilidades ------------------
+---------------- Clase: DatosBDSimulada -----------------
+--------------------- Tipo: java ------------------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ * Clase para simular los registros de una Base de Datos
+ */
+
+package utilidades;
+import java.util.HashMap;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class DatosBDSimulada {
+    private static final HashMap<Long, Cliente> Cliente_MAP = new HashMap<>();
+    private static final HashMap<String, Tarjeta> Tarjeta_BINS = new HashMap<>();
+    
+       static {
+        Cliente_MAP.put(1L, new Cliente(1L, "Mo Salah", 500, "Descontinuado"));
+        Cliente_MAP.put(2L, new Cliente(2L, "Luis Diaz", 300, "Descontinuado"));
+        Cliente_MAP.put(3L, new Cliente(3L, "Sadio Mane", 100, "Activo"));
+        Cliente_MAP.put(4L, new Cliente(4L, "Alisson Becker", 100, "Inactivo"));
+
+        Tarjeta_BINS.put("123", new Tarjeta("123", "VISA", "Credit"));
+        Tarjeta_BINS.put("234", new Tarjeta("234", "MASTERCARD", "Debit"));
+        Tarjeta_BINS.put("345", new Tarjeta("345", "NEQUI", "Credit"));
+    }
+    
+       public static Cliente BuscarClienteId(Long id) {
+        return Cliente_MAP.get(id);
+    }
+
+    public static void CambiarEstadoCliente(Long id, String nuevoestado) {
+        Cliente clientereferencia = BuscarClienteId(id);
+        clientereferencia.setEstado(nuevoestado);
+        System.out.println("Cambio de estado del cliente '" + clientereferencia.getNombre()
+                + "' : " + nuevoestado);
+    }
+    
+    
+    public static boolean ValidarTarjeta(String prefijotarjeta) {
+        if (Tarjeta_BINS.containsKey(prefijotarjeta)) {
+            String company = Tarjeta_BINS.get(prefijotarjeta).getEmpresa();
+            System.out.println("Tarjeta Válida > '" + prefijotarjeta + "', "
+                    + company + "\n");
+            return true;
+        } else {
+            System.out.println("Tarjeta Invalida >\n");
+            return false;
+        }
+    }
+    
+     public static String ObtenerEmpresaTarjeta(String prefijotarjeta) {
+        if (Tarjeta_BINS.containsKey(prefijotarjeta)) {
+            return Tarjeta_BINS.get(prefijotarjeta).getEmpresa();
+        }
+        throw new RuntimeException("La Tarjeta no Existe");
+    }
+}
+
+----------------------------------------------------------
+-------------------Paquete: utilidades ------------------
+-------------------- Clase: Tarjeta ---------------------
+--------------------- Tipo: java ------------------------
+---------------------------------------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+
+package utilidades;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class Tarjeta {
+    private String prefijo;
+    private String empresa;
+    private String tipotarjeta;//{Credito - Debito}
+    
+      public Tarjeta(String prefijo, String empresa, String tipotarjeta) {
+        this.prefijo = prefijo;
+        this.empresa = empresa;
+        this.tipotarjeta = tipotarjeta;
+    }
+
+    public String getPrefijo() {
+        return prefijo;
+    }
+
+    public void setPrefijo(String prefijo) {
+        this.prefijo = prefijo;
+    }
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    public String getTipotarjeta() {
+        return tipotarjeta;
+    }
+
+    public void setTipotarjeta(String tipotarjeta) {
+        this.tipotarjeta = tipotarjeta;
+    }
+    
+      
+
+}
+
+----------------------------------------------------------
+-------------------Paquete: correo -----------------------
+-------------- Clase: SistemaCorreo  --------------------
+--------------------- Tipo: java -------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+
+package correo;
+import java.util.Map;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class SistemaCorreo {
+    
+    public void EnviarCorreo(Map<String, String> values) {
+        String templete = "\n**************************************\n"
+                + "|To: $nombre\n"
+                + "|from: Facade_System\n"
+                + "|\n"
+                + "|Gracias por usar nuestros servicios online\n"
+                + "|para realizar sus pagos.\n"
+                + "|\n"
+                + "|Hace un momento hemos recibido un pago:\n"
+                + "|\n"
+                + "|Monto del pago: $Monto.\n"
+                + "|Nuevo saldo: $NuevoSaldo.\n"
+                + "|Numeros finales de la tarjeta: $NumeroTarjeta\n"
+                + "|Referencia de pago: $Referencia\n"
+                + "|Nuevo estado: $NuevoEstado\n"
+                + "|\n"
+                + "|Gracias por preferirnos.\n"
+                + "|\n"
+                + "|Por favor no contestar este correo, \n"
+                + "|hace parte de un proceso automàtico"
+                + "\n**************************************";
+        
+        for(String str : values.keySet()){
+            templete = templete.replace(str, values.get(str));
+        }
+        
+        System.out.println(templete);
+    }
+}
+
+---------------------------------------------------------
+---------------------Paquete: crm -----------------------
+----------------- Clase: SistemaCRM  --------------------
+--------------------- Tipo: java ------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ * Clase para simular sistema CRM.
+ */
+package crm;
+import utilidades.Cliente;
+import utilidades.DatosBDSimulada;
+
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class SistemaCRM {
+ 
+     public Cliente BuscarCliente(Long clienteId){
+        return DatosBDSimulada.BuscarClienteId(clienteId);
+    }
+}
+
+
+---------------------------------------------------------
+-----------------Paquete: facturador --------------------
+------------ Clase: SistemaFacturacion ------------------
+--------------------- Tipo: java ------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+
+package facturador;
+import utilidades.Cliente;
+import utilidades.DatosBDSimulada;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class SistemaFacturacion {
+    
+     public double ConsultaSaldoCliente(Long clienteId) {
+        Cliente cliente = DatosBDSimulada.BuscarClienteId(clienteId);
+        return cliente.getBalance();
+    }
+    
+     public double pago(SolicitudPagoFactura pagoFactura) {
+        Cliente customer = DatosBDSimulada.BuscarClienteId(pagoFactura.getClienteId());
+        customer.setBalance(customer.getBalance() - pagoFactura.getPago());
+        System.out.println("Pago aplicado al cliente '"+customer.getNombre() +"', "
+                + "el nuevo saldo es '"+customer.getBalance()+"'");
+        return customer.getBalance();//new Balance.
+    }
+}
+
+---------------------------------------------------------
+-----------------Paquete: facturador --------------------
+---------- Clase: SolicitudPagoFactura ------------------
+--------------------- Tipo: java ------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+
+package facturador;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class SolicitudPagoFactura {
+    private Long clienteId;
+    private double pago;
+    
+    public SolicitudPagoFactura(Long clienteId, double pago) {
+        this.clienteId = clienteId;
+        this.pago = pago;
+    }
+
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public double getPago() {
+        return pago;
+    }
+
+    public void setPago(double pago) {
+        this.pago = pago;
+    }
+    
+    
+}
+
+---------------------------------------------------------
+-----------------Paquete: financiera --------------------
+-------------- Clase: SistemaBancario  ------------------
+--------------------- Tipo: java ------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+package financiera;
+import java.util.UUID;
+import implementacion.ErrorGeneralPago;
+import utilidades.DatosBDSimulada;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class SistemaBancario {
+    public String Transferencia(SolicitudTransferencia request) throws ErrorGeneralPago {
+        String NumeroPrefijoTarjeta = request.getNumeroTarjeta().substring(0, 3);
+        if (!DatosBDSimulada.ValidarTarjeta(NumeroPrefijoTarjeta)) {
+            throw new ErrorGeneralPago("Tarjeta Invalida.");
+        }
+        String TarjetaEmpresa = DatosBDSimulada.ObtenerEmpresaTarjeta(NumeroPrefijoTarjeta);
+        if ("NEQUI".equals(TarjetaEmpresa) && request.getNumeroTarjeta().length() != 15) {
+            throw new ErrorGeneralPago("Numero Tarjeta Invalido");
+        } else if (("VISA".equals(TarjetaEmpresa) || "MASTERCARD".equals(TarjetaEmpresa))
+                && request.getNumeroTarjeta().length() != 16) {
+            throw new ErrorGeneralPago("Número Tarjeta Invalido");
+        }
+        String number = request.getNumeroTarjeta();
+        String NumeroSufijoTarjeta = number.substring(number.length()-4, number.length());
+        System.out.println("Se ha hecho un cargo al cliente '"
+                + request.getNombreTarjeta() + "' \n"
+                + "\tPor un monto de: '" + request.getMonto() + "' a la tarjeta "
+                + "terminada en '"+NumeroSufijoTarjeta+"'.\n");
+        
+        return UUID.randomUUID().toString();
+    }
+}
+
+---------------------------------------------------------
+-----------------Paquete: financiera --------------------
+---------- Clase: SolicitudTransferencia-----------------
+--------------------- Tipo: java ------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+package financiera;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class SolicitudTransferencia {
+    
+     private double Monto;
+    private String NumeroTarjeta;
+    private String NombreTarjeta;
+    private String FechaExpiracionTarjeta;
+    private String NumeroSeguridadTarjeta;
+    
+     public SolicitudTransferencia(double Monto, String NumeroTarjeta, String NombreTarjeta, String FechaExpiracionTarjeta, String NumeroSeguridadTarjeta) {
+        this.Monto = Monto;
+        this.NumeroTarjeta = NumeroTarjeta;
+        this.NombreTarjeta = NombreTarjeta;
+        this.FechaExpiracionTarjeta = FechaExpiracionTarjeta;
+        this.NumeroSeguridadTarjeta = NumeroSeguridadTarjeta;
+    }
+
+    public double getMonto() {
+        return Monto;
+    }
+
+    public void setMonto(double Monto) {
+        this.Monto = Monto;
+    }
+
+    public String getNumeroTarjeta() {
+        return NumeroTarjeta;
+    }
+
+    public void setNumeroTarjeta(String NumeroTarjeta) {
+        this.NumeroTarjeta = NumeroTarjeta;
+    }
+
+    public String getNombreTarjeta() {
+        return NombreTarjeta;
+    }
+
+    public void setNombreTarjeta(String NombreTarjeta) {
+        this.NombreTarjeta = NombreTarjeta;
+    }
+
+    public String getFechaExpiracionTarjeta() {
+        return FechaExpiracionTarjeta;
+    }
+
+    public void setFechaExpiracionTarjeta(String FechaExpiracionTarjeta) {
+        this.FechaExpiracionTarjeta = FechaExpiracionTarjeta;
+    }
+
+    public String getNumeroSeguridadTarjeta() {
+        return NumeroSeguridadTarjeta;
+    }
+
+    public void setNumeroSeguridadTarjeta(String NumeroSeguridadTarjeta) {
+        this.NumeroSeguridadTarjeta = NumeroSeguridadTarjeta;
+    }
+     
+     
+}
+
+---------------------------------------------------------
+---------------Paquete: implementacion ------------------
+-------------- Clase: ErrorGeneralPago ------------------
+--------------------- Tipo: java ------------------------
+
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+package implementacion;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ErrorGeneralPago extends Exception {
+     public ErrorGeneralPago(String message) {
+        super(message);
+    }
+}
+
+---------------------------------------------------------
+---------------Paquete: implementacion ------------------
+-------------- Clase: FachadaPagoLinea ------------------
+--------------------- Tipo: java ------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+package implementacion;
+import java.util.HashMap;
+import financiera.SistemaBancario;
+import financiera.SolicitudTransferencia;
+import facturador.SistemaFacturacion;
+import facturador.SolicitudPagoFactura;
+import crm.SistemaCRM;
+import correo.SistemaCorreo;
+import utilidades.DatosBDSimulada;
+import utilidades.Cliente;
+
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FachadaPagoLinea implements InterfaceFacadePago {
+    
+    private static final SistemaCRM crmSistema = new SistemaCRM();
+    private static final SistemaFacturacion facturaSistema = new SistemaFacturacion();
+    private static final SistemaBancario financieraSistema = new SistemaBancario();
+    private static final SistemaCorreo correoSistema = new SistemaCorreo();
+    
+    @Override
+    public RespuestaPago pago(SolicitudPago request) 
+            throws ErrorGeneralPago {
+        Cliente customer = crmSistema.BuscarCliente(request.getClienteId());
+        //Validate Set
+        if(customer==null){
+            throw new ErrorGeneralPago("Id de Cliente no existe '"
+                    +request.getClienteId()+"' no existe.");
+        }else if("Inactive".equals(customer.getEstado() )){
+            throw new ErrorGeneralPago("Id de Cliente no existe '"
+                    +request.getClienteId()+"' esta inactivo.");
+        }else if(request.getMonto() > 
+                facturaSistema.ConsultaSaldoCliente(customer.getId())){
+            throw new ErrorGeneralPago("Estas tratando de hacer un pago "
+                    + "\n\tmayor que el saldo del cliente");
+        }
+        
+        //Cargo a la tarjeta
+        SolicitudTransferencia transfer = new SolicitudTransferencia(
+                request.getMonto() ,request.getNumeroTarjeta(), 
+                request.getNombreTarjeta(), request.getFechaExpiracionTarjeta() , 
+                request.getNumeroTarjeta());
+        String payReference = financieraSistema.Transferencia(transfer);
+        
+        //Impacto de la transacción
+        SolicitudPagoFactura solicitudPago = new SolicitudPagoFactura(
+                request.getClienteId(), request.getMonto());
+        double newBalance =  facturaSistema.pago(solicitudPago);
+        
+        //El cliente se reactiva si el nuevo saldo es inferior a 51 dólares
+        String newStatus = customer.getEstado();
+        if(newBalance<=50){
+            DatosBDSimulada.CambiarEstadoCliente(request.getClienteId(), "Activo");
+            newStatus = "Activo";
+        }
+        
+        //Envio de la confirmación de pago por Email.
+        HashMap<String,String> params = new HashMap<>();
+        params.put("$nombre", customer.getNombre());
+        params.put("$Monto", request.getMonto()+"");
+        params.put("$NuevoSaldo", newBalance+"");
+        String number = request.getNumeroTarjeta();
+        String subfix = number.substring(number.length()-4, number.length());
+        params.put("$NumeroTarjeta", subfix);
+        params.put("$Referencia", payReference);
+        params.put("$NuevoEstado", newStatus);
+        correoSistema.EnviarCorreo(params);
+        
+        return new RespuestaPago(payReference, newBalance, newStatus);
+        
+    }
+
+  
+}
+
+
+
+---------------------------------------------------------
+---------------Paquete: implementacion ------------------
+-------------- Clase: ErrorGeneralPago ------------------
+----------------- Tipo: Interface -----------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+package implementacion;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public interface InterfaceFacadePago {
+    public RespuestaPago pago(SolicitudPago solicitudPago)throws ErrorGeneralPago;
+}
+
+
+
+---------------------------------------------------------
+---------------Paquete: implementacion ------------------
+---------------- Clase: RespuestaPago -------------------
+--------------------- Tipo: java ------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+package implementacion;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class RespuestaPago {
+    private String NumeroConfirmacionPago;
+    private double NuevoSaldo;
+    private String EstadoCliente;
+    
+    public RespuestaPago(String NumeroConfirmacionPago, double NuevoSaldo, String EstadoCliente) {
+        this.NumeroConfirmacionPago = NumeroConfirmacionPago;
+        this.NuevoSaldo = NuevoSaldo;
+        this.EstadoCliente = EstadoCliente;
+    }
+
+    public String getNumeroConfirmacionPago() {
+        return NumeroConfirmacionPago;
+    }
+
+    public void setNumeroConfirmacionPago(String NumeroConfirmacionPago) {
+        this.NumeroConfirmacionPago = NumeroConfirmacionPago;
+    }
+
+    public double getNuevoSaldo() {
+        return NuevoSaldo;
+    }
+
+    public void setNuevoSaldo(double NuevoSaldo) {
+        this.NuevoSaldo = NuevoSaldo;
+    }
+
+    public String getEstadoCliente() {
+        return EstadoCliente;
+    }
+
+    public void setEstadoCliente(String EstadoCliente) {
+        this.EstadoCliente = EstadoCliente;
+    }
+    
+    
+}
+
+---------------------------------------------------------
+---------------Paquete: implementacion ------------------
+---------------- Clase: SolicitudPago -------------------
+--------------------- Tipo: java ------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Java
+ */
+
+package implementacion;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class SolicitudPago {
+     private Long ClienteId;
+    private double Monto;
+    private String NumeroTarjeta;
+    private String NombreTarjeta;
+    private String FechaExpiracionTarjeta;
+    private String NumeroSeguridadTarjeta;
+    
+     public SolicitudPago() {
+    }
+
+    public Long getClienteId() {
+        return ClienteId;
+    }
+
+    public void setClienteId(Long ClienteId) {
+        this.ClienteId = ClienteId;
+    }
+
+    public double getMonto() {
+        return Monto;
+    }
+
+    public void setMonto(double Monto) {
+        this.Monto = Monto;
+    }
+
+    public String getNumeroTarjeta() {
+        return NumeroTarjeta;
+    }
+
+    public void setNumeroTarjeta(String NumeroTarjeta) {
+        this.NumeroTarjeta = NumeroTarjeta;
+    }
+
+    public String getNombreTarjeta() {
+        return NombreTarjeta;
+    }
+
+    public void setNombreTarjeta(String NombreTarjeta) {
+        this.NombreTarjeta = NombreTarjeta;
+    }
+
+    public String getFechaExpiracionTarjeta() {
+        return FechaExpiracionTarjeta;
+    }
+
+    public void setFechaExpiracionTarjeta(String FechaExpiracionTarjeta) {
+        this.FechaExpiracionTarjeta = FechaExpiracionTarjeta;
+    }
+
+    public String getNumeroSeguridadTarjeta() {
+        return NumeroSeguridadTarjeta;
+    }
+
+    public void setNumeroSeguridadTarjeta(String NumeroSeguridadTarjeta) {
+        this.NumeroSeguridadTarjeta = NumeroSeguridadTarjeta;
+    }
+     
+    
+  
+}
+
+
+
+
+
+------------------------------------------------------
+-------------Paquete: patronfacade ----------------
+----------- Clase: PatronFacadeMain.java --------------
+----------------- Tipo: Main() -----------------------
+------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Facade
+ * Tipo de Clase: Main()
+ */
+
+package patronfacade;
+import implementacion.InterfaceFacadePago;
+import implementacion.FachadaPagoLinea;
+import implementacion.SolicitudPago;
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class PatronFacadeMain {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+         SolicitudPago request = new SolicitudPago();
+        request.setMonto(499);
+        request.setFechaExpiracionTarjeta("10/2025");
+        request.setNombreTarjeta("Mo Salah");
+        request.setNumeroTarjeta("1234567890123456");
+        request.setNumeroSeguridadTarjeta("345");
+        request.setClienteId(1L);
+                
+        try {
+            InterfaceFacadePago paymentFacade = new FachadaPagoLinea();
+            paymentFacade.pago(request);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+    }
+    
+}
