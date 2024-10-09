@@ -1,0 +1,209 @@
+----------------------------------------------------------
+----------- PATRON ESTRUCTURAL PROXY --------------------
+----------------------------------------------------------
+
+
+----------------------------------------------------------
+-------------------Paquete: servicios -------------------
+-------------------- Clase: Auditoria-------------------
+--------------------- Tipo: java ------------------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Proxy
+ * Tipo de Clase: Java
+ */
+
+package servicios;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class Auditoria {
+    public void AuditoriaServicioUsado(String user, String servicio){
+        SimpleDateFormat formater= new SimpleDateFormat("dd/MM/YYYY hh:mm:ss");
+        System.out.println(user + " utilizó el servicio > " 
+                + servicio + ", a las " +formater.format(new Date()));
+    }
+}
+
+----------------------------------------------------------
+-------------------Paquete: servicios -------------------
+-------------------- Clase: Seguridad ------------------
+--------------------- Tipo: java ------------------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Proxy
+ * Tipo de Clase: Java
+ */
+package servicios;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class Seguridad {
+    public boolean Autorizacion(String user,String password){
+        if(user.equals("fbolano") && password.equals("pds")){
+            System.out.println("Usuario " + user + " autorizado");
+            return true;
+        }else{
+            System.out.println("Usuario " + user + " no autorizado");
+            return false;
+        }
+    }
+}
+
+
+----------------------------------------------------------
+----------------Paquete: implementacion------------------
+-------------- Clase: InterfaceProcesos ------------------
+--------------------- Tipo: Interface---------------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Proxy
+ * Tipo de Clase: Interface
+ */
+package implementacion;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public interface InterfaceProcesos {
+    public void EjecutarProcesos(int IdProceso, String Usuario, String Password)
+            throws Exception;
+}
+
+
+
+----------------------------------------------------------
+----------------Paquete: implementacion------------------
+--------------- Clase: FabricaServicios -----------------
+--------------------- Tipo: java ------------------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Proxy
+ * Tipo de Clase: Java
+ */
+package implementacion;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class FabricaServicios {
+     public static InterfaceProcesos CrearEjecucionProceso(){
+        return new ProxyProcesos();
+    }
+}
+
+
+----------------------------------------------------------
+----------------Paquete: implementacion------------------
+---------------- Clase: ProcesoDefecto -------------------
+--------------------- Tipo: java ------------------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Proxy
+ * Tipo de Clase: Java
+ */
+package implementacion;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ProcesoDefecto implements InterfaceProcesos {
+
+    @Override
+    public void EjecutarProcesos(int IdProceso, String Usuario, String Password) throws Exception {
+        System.out.println("proceso " + IdProceso + " en acciòn");
+        System.out.println("proceso " + IdProceso + " finalizado");
+    }
+    
+}
+
+
+
+----------------------------------------------------------
+----------------Paquete: implementacion------------------
+----------------- Clase: ProxyProcesos -------------------
+--------------------- Tipo: java ------------------------
+---------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Proxy
+ * Tipo de Clase: Java
+ */
+package implementacion;
+import servicios.Auditoria;
+import servicios.Seguridad;
+
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class ProxyProcesos implements InterfaceProcesos {
+
+    @Override
+    public void EjecutarProcesos(int IdProceso, String Usuario, String Password) throws Exception {
+         Seguridad securityService = new Seguridad();
+        if(!securityService.Autorizacion(Usuario, Password)){
+            throw new Exception("El usuario '"+Usuario
+                    +"' no tiene privilegios para ejecutar el proceso");
+        }
+        
+        ProcesoDefecto ejecutorProcess = new ProcesoDefecto();
+        ejecutorProcess.EjecutarProcesos(IdProceso, Usuario, Password);
+        
+        Auditoria audit = new Auditoria();
+        audit.AuditoriaServicioUsado(Usuario, ProcesoDefecto.class.getName());
+    }
+    
+}
+
+------------------------------------------------------
+---------------Paquete: patronproxy -----------------
+----------- Clase: PatronProxyMain.java ---------------
+----------------- Tipo: Main() -----------------------
+------------------------------------------------------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Estructural - > Proxy
+ * Tipo de Clase: Main()
+ */
+
+package patronproxy;
+import implementacion.InterfaceProcesos;
+import implementacion.FabricaServicios;
+/**
+ *
+ * @author Fabrizio Bolaño
+ */
+public class PatronProxyMain {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+        String usuario = "fbolano";
+        String password = "8877";
+        int proceso = 1;
+        InterfaceProcesos ProcesoActivo = FabricaServicios.CrearEjecucionProceso(); 
+        try {
+            ProcesoActivo.EjecutarProcesos(proceso, usuario, password);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+}
