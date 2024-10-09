@@ -37,19 +37,19 @@ public class PatronComposite {
 
     private void CreardProductos() {
         //Configuraciòn de productos simples
-        ram4gb = new ConfiguracionSimpleProducto("RAM 4GB", 750, "KingStone");
-        ram8gb = new ConfiguracionSimpleProducto("RAM 8GB", 1000, "KingStone");
-        disk500gb = new ConfiguracionSimpleProducto("HDD 500GB", 1500, "ACME");
-        disk1tb = new ConfiguracionSimpleProducto("HDD 1TB", 2000, "ACME");
-        cpuAMD = new ConfiguracionSimpleProducto("AMD phenon", 4000, "AMD");
-        cpuIntel = new ConfiguracionSimpleProducto("Intel i7", 4500, "Intel");
-        smallCabinete = new ConfiguracionSimpleProducto("Small cabinet", 2000, "ExCom");
-        bigCabinete = new ConfiguracionSimpleProducto("Big Cabinet", 2200, "ExCom");
-        monitor20inch = new ConfiguracionSimpleProducto("Display 20'", 1500, "HP");
-        monitor30inch = new ConfiguracionSimpleProducto("Display 30'", 2000, "HP");
-        simpleMouse = new ConfiguracionSimpleProducto("Simple mouse", 150, "Genius");
-        gammerMouse = new ConfiguracionSimpleProducto("Gammer mouse", 750, "Alien");
-        descuento = new ConfiguracionSimpleProducto("Descuento", -500, "Descuento");
+        ram4gb = new ConfiguracionSimpleProducto("RAM 4GB", 750, "KingStone", 0.16, 2);
+        ram8gb = new ConfiguracionSimpleProducto("RAM 8GB", 1000, "KingStone", 0.12, 3);
+        disk500gb = new ConfiguracionSimpleProducto("HDD 500GB", 1500, "ACME", 0.14, 1);
+        disk1tb = new ConfiguracionSimpleProducto("HDD 1TB", 2000, "ACME", 0.15, 2);
+        cpuAMD = new ConfiguracionSimpleProducto("AMD phenon", 4000, "AMD", 0.18, 1);
+        cpuIntel = new ConfiguracionSimpleProducto("Intel i7", 4500, "Intel", 0.17, 2);
+        smallCabinete = new ConfiguracionSimpleProducto("Small cabinet", 2000, "ExCom", 0.10, 1);
+        bigCabinete = new ConfiguracionSimpleProducto("Big Cabinet", 2200, "ExCom", 0.13, 2);
+        monitor20inch = new ConfiguracionSimpleProducto("Display 20'", 1500, "HP", 0.16, 1);
+        monitor30inch = new ConfiguracionSimpleProducto("Display 30'", 2000, "HP", 0.14, 2);
+        simpleMouse = new ConfiguracionSimpleProducto("Simple mouse", 150, "Genius", 0.08, 5);
+        gammerMouse = new ConfiguracionSimpleProducto("Gammer mouse", 750, "Alien", 0.20, 3);
+        descuento = new ConfiguracionSimpleProducto("Descuento", -500, "Descuento", 0.0, 1);
 
         //Producto Compuesto con: Gammer pc de 8gb ram,HDD 1tb, Intel i7 processor
         //large cabinet,display 30' y one gammer mouse.
@@ -96,7 +96,6 @@ public class PatronComposite {
 
     private void OrdenVentaHomePC() {
         OrdenVenta homeOrdenVenta = new OrdenVenta(2, "Celia Cruz");
-        homeOrdenVenta.AgregarProducto(homePC);
         homeOrdenVenta.AgregarProducto(homePC);
         homeOrdenVenta.ImprimirOrdenVenta();
     }

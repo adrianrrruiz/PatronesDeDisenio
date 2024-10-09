@@ -46,9 +46,11 @@ public class OrdenVenta {
         System.out.println("\\\n============================================="
                 + "\nCodigo_Orden: " + CodigoOrden + "\nCliente: " + Cliente
                 + "\nProductos:\n");
+        System.out.println("NOMBRE" + "\t\t" + "CANTIDAD" + "\t\t"
+                + "PRECIO SIN IMPUESTO" + "\t\t" + "IMPUESTO" + "\t\t" + "PRECIO CON IMPUESTO");
         for (AbstraccionProducto prod : productos) {
-            System.out.println(prod.getNombre() + "\t\t\t$ "
-                    + formater.format(prod.getPrecio()) + "\t\t\t$ " + formater.format(prod.getPrecio() * prod.getTasaImpuesto()));
+            System.out.println(prod.getNombre() + "\t\t\t " + prod.getCantidad() + "\t\t\t$ "
+                    + formater.format(prod.getPrecio()) + "\t\t\t" + prod.getTasaImpuesto() + "\t\t\t$ " +  formater.format(prod.getPrecio() + (prod.getPrecio() * prod.getTasaImpuesto())));
         }
         System.out.println("Total: " + formater.format(getPrecio())
                 + "\n=============================================");

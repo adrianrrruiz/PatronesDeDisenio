@@ -18,7 +18,7 @@ public class ConfiguracionCompuestaProducto extends AbstraccionProducto {
     private List<AbstraccionProducto> productos = new ArrayList<AbstraccionProducto>();
 
     public ConfiguracionCompuestaProducto(String nombre) {
-        super(nombre, 0);
+        super(nombre, 0, 0.1, 1);
     }
 
     @Override

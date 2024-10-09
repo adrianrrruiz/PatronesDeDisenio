@@ -16,12 +16,12 @@ public abstract class AbstraccionProducto {
     protected double tasaImpuesto;
     protected int cantidad;
 
-    public AbstraccionProducto(String nombre, double precio) {
+    public AbstraccionProducto(String nombre, double precio, double tasaImpuesto, int cantidad) {
         super();
         this.nombre = nombre;
         this.precio = precio;
-        this.tasaImpuesto = 0.16;
-        this.cantidad = 2;
+        this.tasaImpuesto = tasaImpuesto;
+        this.cantidad = cantidad;
     }
 
     public String getNombre() {

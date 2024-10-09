@@ -14,8 +14,8 @@ package composicion.productos;
 public class ConfiguracionSimpleProducto extends AbstraccionProducto {
     protected String marca;
 
-    public ConfiguracionSimpleProducto(String nombre, double precio, String marca) {
-        super(nombre, precio);
+    public ConfiguracionSimpleProducto(String nombre, double precio, String marca, double tasaImpuesto, int cantidad) {
+        super(nombre, precio, tasaImpuesto, cantidad);
         this.marca = marca;
     }
 
