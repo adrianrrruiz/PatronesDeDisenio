@@ -25,6 +25,7 @@ public class SistemaCorreo {
                 + "|\n"
                 + "|Monto del pago: $Monto.\n"
                 + "|Nuevo saldo: $NuevoSaldo.\n"
+                + "|Puntos ganados: $PuntosAcumulados.\n"
                 + "|Numeros finales de la tarjeta: $NumeroTarjeta\n"
                 + "|Referencia de pago: $Referencia\n"
                 + "|Nuevo estado: $NuevoEstado\n"

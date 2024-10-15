@@ -17,10 +17,10 @@ public class DatosBDSimulada {
     private static final HashMap<String, Tarjeta> Tarjeta_BINS = new HashMap<>();
 
     static {
-        Cliente_MAP.put(1L, new Cliente(1L, "Mo Salah", 500, "Descontinuado"));
-        Cliente_MAP.put(2L, new Cliente(2L, "Luis Diaz", 300, "Descontinuado"));
-        Cliente_MAP.put(3L, new Cliente(3L, "Sadio Mane", 100, "Activo"));
-        Cliente_MAP.put(4L, new Cliente(4L, "Alisson Becker", 100, "Inactivo"));
+        Cliente_MAP.put(1L, new Cliente(1L, "Mo Salah", 500, "Descontinuado", 40));
+        Cliente_MAP.put(2L, new Cliente(2L, "Luis Diaz", 300, "Descontinuado", 200));
+        Cliente_MAP.put(3L, new Cliente(3L, "Sadio Mane", 100, "Activo", 1000));
+        Cliente_MAP.put(4L, new Cliente(4L, "Alisson Becker", 100, "Inactivo", 500));
 
         Tarjeta_BINS.put("123", new Tarjeta("123", "VISA", "Credit"));
         Tarjeta_BINS.put("234", new Tarjeta("234", "MASTERCARD", "Debit"));

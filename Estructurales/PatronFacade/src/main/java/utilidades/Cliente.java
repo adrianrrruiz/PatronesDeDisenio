@@ -15,15 +15,17 @@ public class Cliente {
     private String nombre;
     private double balance;
     private String estado;
+    private int puntos;
 
     public Cliente() {
     }
 
-    public Cliente(Long id, String nombre, double balance, String estado) {
+    public Cliente(Long id, String nombre, double balance, String estado, int puntos) {
         this.id = id;
         this.nombre = nombre;
         this.balance = balance;
         this.estado = estado;
+        this.puntos = puntos;
     }
 
     public Long getId() {
@@ -58,10 +60,18 @@ public class Cliente {
         this.estado = estado;
     }
 
+    public int getPuntos() {
+        return puntos;
+    }
+
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
+    }
+
     @Override
     public String toString() {
         return "Cliente{" + "id=" + id + ", nombre=" + nombre + ", "
-                + "\nbalance=" + balance + ", estado=" + estado + '}';
+                + "\nbalance=" + balance + ", estado=" + estado + ", puntos=" + puntos + '}';
     }
 
 
