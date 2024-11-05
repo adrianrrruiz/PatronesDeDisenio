@@ -1,0 +1,143 @@
+//pakage: templateMethod
+//class: CasaAbstracta
+
+package org.example.templateMethod;
+
+public abstract class CasaAbstracta {
+    // Método plantilla que define el esqueleto de la construcción
+    public final void construirCasa() {
+        construirCimientos();
+        construirEstructura();
+        instalarPuertas();
+        instalarVentanas();
+        if (tieneGarage()) { // Hook o gancho
+            construirGarage();
+        }
+        pintarCasa();
+        System.out.println("Casa construida.\n");
+    }
+
+    // Pasos comunes que las subclases pueden sobrescribir
+    protected abstract void construirCimientos();
+    protected abstract void construirEstructura();
+    protected abstract void instalarPuertas();
+    protected abstract void instalarVentanas();
+    protected abstract void pintarCasa();
+
+    // Método opcional (hook) que se puede sobrescribir
+    protected boolean tieneGarage() {
+        return true; // Valor por defecto
+    }
+
+    // Método adicional solo si hay un garage
+    protected void construirGarage() {
+        System.out.println("Construyendo un garage.");
+    }
+}
+
+
+
+
+//pakage: templateMethod
+//class: CasaEstandar
+package org.example.templateMethod;
+
+public class CasaEstándar extends CasaAbstracta {
+
+    @Override
+    protected void construirCimientos() {
+        System.out.println("Construyendo cimientos de concreto.");
+    }
+
+    @Override
+    protected void construirEstructura() {
+        System.out.println("Construyendo estructura de madera.");
+    }
+
+    @Override
+    protected void instalarPuertas() {
+        System.out.println("Instalando puertas estándar.");
+    }
+
+    @Override
+    protected void instalarVentanas() {
+        System.out.println("Instalando ventanas estándar.");
+    }
+
+    @Override
+    protected void pintarCasa() {
+        System.out.println("Pintando casa de color blanco.");
+    }
+}
+
+
+
+
+
+
+//pakage:templateMethod
+//class: CasaPersonalizada
+
+package org.example.templateMethod;
+
+public class CasaPersonalizada extends CasaAbstracta {
+
+    @Override
+    protected void construirCimientos() {
+        System.out.println("Construyendo cimientos reforzados.");
+    }
+
+    @Override
+    protected void construirEstructura() {
+        System.out.println("Construyendo estructura de acero.");
+    }
+
+    @Override
+    protected void instalarPuertas() {
+        System.out.println("Instalando puertas de diseño personalizado.");
+    }
+
+    @Override
+    protected void instalarVentanas() {
+        System.out.println("Instalando ventanas de alta eficiencia energética.");
+    }
+
+    @Override
+    protected void pintarCasa() {
+        System.out.println("Pintando casa de color azul.");
+    }
+
+    // Sobrescribimos el hook para indicar que esta casa no tiene garage
+    @Override
+    protected boolean tieneGarage() {
+        return false; // No se construirá un garage
+    }
+}
+
+
+
+
+
+//class: Main:
+
+package org.example;
+
+import org.example.templateMethod.CasaAbstracta;
+import org.example.templateMethod.CasaEstándar;
+import org.example.templateMethod.CasaPersonalizada;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Construcción de casa estándar:");
+        CasaAbstracta casaEstandar = new CasaEstándar();
+        casaEstandar.construirCasa();
+
+        System.out.println("Construcción de casa personalizada:");
+        CasaAbstracta casaPersonalizada = new CasaPersonalizada();
+        casaPersonalizada.construirCasa();
+    }
+}
+
+
+
+
