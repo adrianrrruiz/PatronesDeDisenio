@@ -1,0 +1,119 @@
+------------------Paquete: comandos --------------------
+-------- Clase: Command.java (Interface) -----------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Comportamiento - > Command
+ * Tipo de Clase: Interface
+ */
+package comandos;
+
+/**
+ * Command interface que declara el método execute
+ */
+public interface Command {
+    void execute();
+}
+------------------Paquete: comandos --------------------
+-------- Clase: LightOnCommand.java (Concrete Command) -----------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Comportamiento - > Command
+ * Tipo de Clase: Command Concreto
+ */
+package comandos;
+
+import receptores.Light;
+
+/**
+ * Comando concreto para encender la luz
+ */
+public class LightOnCommand implements Command {
+    private Light light;
+
+    public LightOnCommand(Light light) {
+        this.light = light;
+    }
+
+    @Override
+    public void execute() {
+        light.turnOn();
+    }
+}
+------------------Paquete: receptores --------------------
+-------- Clase: Light.java (Receiver) -----------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Comportamiento - > Command
+ * Tipo de Clase: Receptor
+ */
+package receptores;
+
+/**
+ * Receptor que realiza la acción
+ */
+public class Light {
+    public void turnOn() {
+        System.out.println("Light is on");
+    }
+
+    public void turnOff() {
+        System.out.println("Light is off");
+    }
+}
+------------------Paquete: invocadores --------------------
+-------- Clase: RemoteControl.java (Invoker) -----------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Comportamiento - > Command
+ * Tipo de Clase: Invocador
+ */
+package invocadores;
+
+import comandos.Command;
+
+/**
+ * El invocador mantiene un comando y lo ejecuta
+ */
+public class RemoteControl {
+    private Command command;
+
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    public void pressButton() {
+        command.execute();
+    }
+}
+------------------Paquete: cliente --------------------
+-------- Clase: Client.java (Cliente) -----------
+/*
+ * Asignatura: Patrones de Diseño de Software 
+ * Patrón Comportamiento - > Command
+ * Tipo de Clase: Cliente
+ */
+package cliente;
+
+import comandos.Command;
+import comandos.LightOnCommand;
+import invocadores.RemoteControl;
+import receptores.Light;
+
+/**
+ * Clase principal que ejecuta el patrón Command
+ */
+public class Cliente {
+    public static void main(String[] args) {
+        // Receptor
+        Light light = new Light();
+        
+        // Command
+        Command lightOn = new LightOnCommand(light);
+        
+        // Invocador
+        RemoteControl remote = new RemoteControl();
+        remote.setCommand(lightOn);
+        remote.pressButton(); // Output: Light is on
+    }
+}
+
