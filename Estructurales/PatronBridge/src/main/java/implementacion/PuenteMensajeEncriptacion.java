@@ -7,10 +7,7 @@
  */
 package implementacion;
 import encriptacion.InterfaceEncriptar;
-/**
- *
- * @author Fabrizio Bolaño
- */
+
 public class PuenteMensajeEncriptacion implements InterfaceMensajeEncriptacion {
     private InterfaceEncriptar ProcesoEncryptacion;
 
