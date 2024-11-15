@@ -22,10 +22,7 @@ public class PatronProxyMain {
         String password = "pds";
         int proceso = 1;
 
-        // Para definir si queremos un proxy con auditoría o sin auditoría
-        boolean auditable = true;
-
-        InterfaceProcesos ProcesoActivo = FabricaServicios.CrearEjecucionProceso(auditable);
+        InterfaceProcesos ProcesoActivo = FabricaServicios.CrearEjecucionProceso();
 
         try {
             ProcesoActivo.EjecutarProcesos(proceso, usuario, password);

@@ -13,7 +13,7 @@ import patronfactorymethod.FactoryProxy;
  */
 public class FabricaServicios {
     // Parámetro que permite elegir el tipo de proxy
-    public static InterfaceProcesos CrearEjecucionProceso(boolean auditable) {
+    public static InterfaceProcesos CrearEjecucionProceso() {
         return FactoryProxy.getDefaultProxyAdapter();
     }
 }
